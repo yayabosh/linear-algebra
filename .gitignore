@@ -1,0 +1,5 @@
+# ignore all logs
+*.code-workspace
+/target/*
+.classpath
+.project
