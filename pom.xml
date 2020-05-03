@@ -10,7 +10,7 @@
 
   <name>linearalgebra</name>
   <!-- FIXME change it to the project's website -->
-  <url>http://www.example.com</url>
+  <url>https://github.com/aboshupadhyaya/linear-algebra</url>
 
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -19,11 +19,17 @@
   </properties>
 
   <dependencies>
+    <!-- JUnit -->
     <dependency>
       <groupId>junit</groupId>
       <artifactId>junit</artifactId>
-      <version>4.11</version>
-      <scope>test</scope>
+      <version>4.13</version>
+    </dependency>
+    <!-- Google Guava -->
+    <dependency>
+      <groupId>com.google.guava</groupId>
+      <artifactId>guava</artifactId>
+      <version>29.0-jre</version>
     </dependency>
   </dependencies>
 
@@ -31,6 +37,11 @@
     <pluginManagement><!-- lock down plugins versions to avoid using Maven defaults (may be moved to parent pom) -->
       <plugins>
         <!-- clean lifecycle, see https://maven.apache.org/ref/current/maven-core/lifecycles.html#clean_Lifecycle -->
+        <plugin>
+          <groupId>org.openclover</groupId>
+          <artifactId>clover-maven-plugin</artifactId>
+          <version>4.4.1</version>     
+      </plugin>
         <plugin>
           <artifactId>maven-clean-plugin</artifactId>
           <version>3.1.0</version>
@@ -72,4 +83,35 @@
       </plugins>
     </pluginManagement>
   </build>
+
+  <licenses>
+    <license>
+      <name>Apache License, Version 2.0</name>
+      <url>https://www.apache.org/licenses/LICENSE-2.0.txt</url>
+      <distribution>repo</distribution>
+      <comments>A business-friendly OSS license</comments>
+    </license>
+  </licenses>
+  
+  <developers>
+    <developer>
+      <id>yayabosh</id>
+      <name>Abosh Upadhyaya</name>
+      <email>aboshu@gmail.com</email>
+      <url>https://github.com/aboshupadhyaya</url>
+      <timezone>America/Los_Angeles</timezone>
+    </developer>
+  </developers>
+
+  <contributors>
+    <contributor>
+      <name>Prerak Upadhyaya</name>
+      <email>preraku@gmail.com</email>
+      <timezone>America/Los_Angeles</timezone>
+    </contributor>
+    <contributor>
+      <name>Ethan Vrhel</name>
+      <timezone>America/Los_Angeles</timezone>
+    </contributor>
+  </contributors>
 </project>

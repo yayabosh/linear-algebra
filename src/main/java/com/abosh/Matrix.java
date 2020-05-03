@@ -10,7 +10,7 @@ public class Matrix {
     private final int[][] matrix;
     private final int rows;
     private final int cols;
-    
+
     /**
      * default constructor. initializes all values in matrix to 0.
      * 
@@ -35,9 +35,30 @@ public class Matrix {
     }
 
     /**
+     * replaces the current matrix with the identity matrix, preserving its current dimensions and resetting the matrix
+     * to a default state.
+     */
+    public void gLoadIdentity() {
+        if (this.rows != this.cols)
+            throw new IllegalArgumentException(
+                "An identity matrix must be square, i.e. the number of rows and columns must be equal.");
+        // where the 1 will be located
+        int i = 0;
+        for (int r = 0; r < this.rows; r++) {
+            for (int c = 0; c < this.cols; c++) {
+                if (c == i)
+                    matrix[r][i] = 1;
+                else
+                    matrix[r][c] = 0;
+            }
+            i++;
+        }
+    }
+
+    /**
      * sets values for a row in the matrix starting at the beginning of the row.
      * 
-     * @param r      row number
+     * @param r      row index
      * @param values values to set
      */
     public void setRow(final int r, final int[] values) {
@@ -49,26 +70,35 @@ public class Matrix {
     /**
      * sets values for a row in the matrix starting at a specific index.
      * 
-     * @param r      row number
+     * @param r      row index
      * @param values values to set
-     * @param i      index to start setting at
+     * @param i      index to start copying from in values[]
      * @param len    total number of components to be copied from values[]
      */
     public void setRowFromIndex(final int r, final int[] values, final int i, final int len) {
-        if (len > values.length - i)
+        if (r >= rows)
             throw new IllegalArgumentException(
-                    "The number of components to be copied into the matrix exceed its column bounds.");
-        System.arraycopy(values, 0, matrix[r], i, len);
+                "The specified row index is greater than the number of rows in the matrix.");
+        if (len > cols)
+            throw new IllegalArgumentException(
+                "The number of components to be copied into the matrix exceed the matrix's bounds.");
+        if (i + len > values.length)
+            throw new IllegalArgumentException(
+                "The number of components to be copied from the inputted array exceed its bounds.");
+        System.arraycopy(values, i, matrix[r], 0, len);
     }
 
     /**
      * sets the value of one position in the matrix.
      * 
-     * @param r     row number
-     * @param c     column number
+     * @param r     row index
+     * @param c     column index
      * @param value value to set
      */
     public void setValue(final int r, final int c, final int value) {
+        if (r >= rows || c >= cols)
+            throw new IllegalArgumentException(
+                "The specified location exceeds the matrix's row or column bounds.");
         matrix[r][c] = value;
     }
 
@@ -91,11 +121,10 @@ public class Matrix {
      * @param addend matrix to be added to current matrix.
      */
     public void addInPlace(final Matrix addend) {
-        if (!dimensionEquality(addend)) {
+        if (!dimensionEquality(addend))
             throw new IllegalArgumentException(
-                    String.format("Expected %f rows and %f columns. Received %f rows and %f columns.",
+                    String.format("Expected %d rows and %d columns. Received %d rows and %d columns.",
                             this.getRows(), this.getCols(), addend.getRows(), addend.getRows()));
-        }
         // add the matrices
         for (int r = 0; r < rows; r++) {
             for (int c = 0; c < cols; c++) {
@@ -122,11 +151,11 @@ public class Matrix {
      */
     public void subtractInPlace(final Matrix subtrahend) {
         // matrix rows and columns must be equivalent for matrix subtraction
-        if (!dimensionEquality(subtrahend)) {
+        if (!dimensionEquality(subtrahend))
             throw new IllegalArgumentException(
-                    String.format("Expected %f rows and %f columns. Received %f rows and" + " %f columns.",
+                    String.format("Expected %d rows and %d columns. Received %d rows and %d columns.",
                             this.getRows(), this.getCols(), subtrahend.getRows(), subtrahend.getRows()));
-        }
+
         for (int r = 0; r < rows; r++) {
             for (int c = 0; c < cols; c++) {
                 this.matrix[r][c] -= subtrahend.getValue(r, c);
@@ -143,8 +172,7 @@ public class Matrix {
     public Matrix multiply(final Matrix multiplicand) {
         if (this.cols != multiplicand.getRows())
             throw new IllegalArgumentException(
-                String.format("Expected %f columns and %f rows. Received %f columns and %f rows.", 
-                    this.cols, this.cols, this.cols, multiplicand.getRows()));
+                "The number of columns in this matrix must equal the number of rows in the multiplicand matrix.");
 
         final Matrix product = new Matrix(this.rows, multiplicand.getCols());
         for (int r = 0; r < product.getRows(); r++) {
@@ -158,9 +186,10 @@ public class Matrix {
 
     @Override
     public boolean equals(final Object anObject) {
+        // compares memory locations
         if (this == anObject)
             return true;
-
+        // compares matrix values
         if (anObject instanceof Matrix) {
             final Matrix anotherMatrix = (Matrix) anObject;
             if (!dimensionEquality(anotherMatrix))
@@ -179,25 +208,42 @@ public class Matrix {
     /**
      * tests row and column equality between an inputted matrix and the current matrix object.
      * @param m an inputted matrix
-     * @return if the matrices' dimensions are equal
+     * @return if both the matrices' dimensions are equal
      */
     public boolean dimensionEquality(final Matrix m) {
         return m.getRows() == this.getRows() && m.getCols() == this.getCols();
     }
 
-    public void loadIdentity() {
-
-    }
-
     /**
-     * returns a value at a specified location in the matrix.
+     * returns a value at specified indices in the matrix.
      * 
-     * @param r row number
-     * @param c column number
+     * @param r row index
+     * @param c column index
      * @return a value in the matrix
      */
     public int getValue(final int r, final int c) {
         return this.matrix[r][c];
+    }
+
+    /**
+     * returns a specified row in the matrix.
+     * @param r row index
+     * @return the specified row
+     */
+    public int[] getRow(final int r) {
+        return matrix[r];
+    }
+
+    /**
+     * returns a specified column in the matrix as a horizontal array.
+     * @param c column index
+     * @return the specified column
+     */
+    public int[] getCol(final int c) {
+        final int[] col = new int[rows];
+        for (int r = 0; r < rows; r++)
+            col[r] = matrix[r][c];
+        return col;
     }
 
     public int getRows() {
@@ -209,10 +255,9 @@ public class Matrix {
     }
 
     /**
-     * Returns a string representation of the contents of the specified matrix.
-     * The string representation consists of a list of the matrix's elements
-     * enclosed in square brackets. Adjacent elements are separated by a comma 
-     * followed by a space.
+     * Returns a string representation of the contents of the specified matrix. The string representation consists of a
+     * list of the matrix's elements enclosed in square brackets. Adjacent elements are separated by a comma followed by
+     * a space.
      * @return a string representation of the matrix
      */
     @Override
