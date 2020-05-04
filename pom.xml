@@ -32,6 +32,7 @@
       <plugins>
         <!-- clean lifecycle, see https://maven.apache.org/ref/current/maven-core/lifecycles.html#clean_Lifecycle -->
         <plugin>
+          <!-- Command: mvn clean clover:setup test clover:aggregate clover:clover -->
           <groupId>org.openclover</groupId>
           <artifactId>clover-maven-plugin</artifactId>
           <version>4.4.1</version>     
