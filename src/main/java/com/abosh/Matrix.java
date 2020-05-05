@@ -7,7 +7,7 @@ import java.util.Arrays;
  */
 public class Matrix {
     // private data fields
-    private final int[][] matrix;
+    private final double[][] matrix;
     private final int rows;
     private final int cols;
 
@@ -18,7 +18,7 @@ public class Matrix {
      * @param cols number of columns in matrix
      */
     public Matrix(final int rows, final int cols) {
-        this.matrix = new int[rows][cols];
+        this.matrix = new double[rows][cols];
         this.rows = rows;
         this.cols = cols;
     }
@@ -47,9 +47,9 @@ public class Matrix {
         for (int r = 0; r < this.rows; r++) {
             for (int c = 0; c < this.cols; c++) {
                 if (c == i)
-                    matrix[r][i] = 1;
+                    matrix[r][i] = 1.0;
                 else
-                    matrix[r][c] = 0;
+                    matrix[r][c] = 0.0;
             }
             i++;
         }
@@ -61,7 +61,7 @@ public class Matrix {
      * @param r      row index
      * @param values values to set
      */
-    public void setRow(final int r, final int[] values) {
+    public void setRow(final int r, final double[] values) {
         if (values.length > cols)
             throw new IllegalArgumentException("There cannot be more values than columns in the matrix.");
         setRowFromIndex(r, values, 0, values.length);
@@ -75,7 +75,7 @@ public class Matrix {
      * @param i      index to start copying from in values[]
      * @param len    total number of components to be copied from values[]
      */
-    public void setRowFromIndex(final int r, final int[] values, final int i, final int len) {
+    public void setRowFromIndex(final int r, final double[] values, final int i, final int len) {
         if (r >= rows)
             throw new IllegalArgumentException(
                 "The specified row index is greater than the number of rows in the matrix.");
@@ -95,7 +95,7 @@ public class Matrix {
      * @param c     column index
      * @param value value to set
      */
-    public void setValue(final int r, final int c, final int value) {
+    public void setValue(final int r, final int c, final double value) {
         if (r >= rows || c >= cols)
             throw new IllegalArgumentException(
                 "The specified location exceeds the matrix's row or column bounds.");
@@ -221,7 +221,7 @@ public class Matrix {
      * @param c column index
      * @return a value in the matrix
      */
-    public int getValue(final int r, final int c) {
+    public double getValue(final int r, final int c) {
         return this.matrix[r][c];
     }
 
@@ -230,7 +230,7 @@ public class Matrix {
      * @param r row index
      * @return the specified row
      */
-    public int[] getRow(final int r) {
+    public double[] getRow(final int r) {
         return matrix[r];
     }
 
@@ -239,8 +239,8 @@ public class Matrix {
      * @param c column index
      * @return the specified column
      */
-    public int[] getCol(final int c) {
-        final int[] col = new int[rows];
+    public double[] getCol(final int c) {
+        final double[] col = new double[rows];
         for (int r = 0; r < rows; r++)
             col[r] = matrix[r][c];
         return col;
@@ -263,7 +263,7 @@ public class Matrix {
     @Override
     public String toString() {
         final StringBuilder builder = new StringBuilder();
-        for (final int[] row : this.matrix) {
+        for (final double[] row : this.matrix) {
             builder.append(Arrays.toString(row));
             builder.append("\n");
         }

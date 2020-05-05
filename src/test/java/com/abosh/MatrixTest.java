@@ -22,13 +22,13 @@ public class MatrixTest {
     @Test
     public void testMatrixCopyConstructor() {
         final Matrix m = new Matrix(4, 5);
-        final int[] values = new int[] { 60, 20, 30, 40, 50 };
+        final double[] values = new double[] { 60, 20, 30, 40, 50 };
         m.setRow(2, values);
         final Matrix copy = new Matrix(m);
         assertEquals(m, copy);
         assertEquals(4, m.getRows());
         assertEquals(5, m.getCols());
-        assertArrayEquals(values, copy.getRow(2));
+        assertArrayEquals(values, copy.getRow(2), 0);
     }
 
     @Test
@@ -56,15 +56,15 @@ public class MatrixTest {
 
     @Test
     public void testSetRowHappyPath() {
-        final int[] values = new int[] { 1, 2, 3, 4, 5 };
+        final double[] values = new double[] { 1, 2, 3, 4, 5 };
         final Matrix m = new Matrix(3, 5);
         m.setRow(2, values);
-        assertArrayEquals(values, m.getRow(2));
+        assertArrayEquals(values, m.getRow(2), 0);
     }
 
     @Test
     public void testSetRowThrowsIllegalArgumentException() {
-        final int[] values = new int[] { 5, 6, 7, 2, 3 };
+        final double[] values = new double[] { 5, 6, 7, 2, 3 };
         final Matrix m = new Matrix(2, 1);
         final IllegalArgumentException thrown = assertThrows(
             IllegalArgumentException.class, () -> m.setRow(1, values));
@@ -74,18 +74,18 @@ public class MatrixTest {
     @Test
     public void setRowFromIndexHappyPath() {
         // given
-        final int[] values = new int[] { 583, 24, 1134, 3, 78 };
+        final double[] values = new double[] { 583, 24, 1134, 3, 78 };
         final Matrix m = new Matrix(4, 4);
-        final int[] selectedValues = new int[] { 24, 1134, 3, 78 };
+        final double[] selectedValues = new double[] { 24, 1134, 3, 78 };
         // when
         m.setRowFromIndex(1, values, 1, 4);
         // then
-        assertArrayEquals(selectedValues, m.getRow(1));
+        assertArrayEquals(selectedValues, m.getRow(1), 0);
     }
 
     @Test
     public void setRowFromIndexThrowsIllegalArgumentExceptionRows() {
-        final int[] values = new int[] { 123, 23, 54, 38, 34 };
+        final double[] values = new double[] { 123, 23, 54, 38, 34 };
         final Matrix m = new Matrix(23, 4);
         final IllegalArgumentException thrown = assertThrows(
             IllegalArgumentException.class, () -> m.setRowFromIndex(24, values, 2, 3));
@@ -95,7 +95,7 @@ public class MatrixTest {
 
     @Test
     public void setRowFromIndexThrowsIllegalArgumentExceptionCols() {
-        final int[] values = { 9, 4, 3 };
+        final double[] values = { 9, 4, 3 };
         final Matrix m = new Matrix(2, 2);
         final IllegalArgumentException thrown = assertThrows(
             IllegalArgumentException.class, () -> m.setRowFromIndex(0, values, 0, 3));
@@ -105,7 +105,7 @@ public class MatrixTest {
 
     @Test
     public void setRowFromIndexThrowsIllegalArgumentExceptionArrayBounds() {
-        final int[] values = { 10, 443, 32, 43, 89 };
+        final double[] values = { 10, 443, 32, 43, 89 };
         final Matrix m = new Matrix(5, 7);
         final IllegalArgumentException thrown = assertThrows(
             IllegalArgumentException.class, () -> m.setRowFromIndex(0, values, 2, 4));
@@ -117,7 +117,7 @@ public class MatrixTest {
     public void testSetValueHappyPath() {
         final Matrix m = new Matrix(3, 4);
         m.setValue(2, 3, 435);
-        assertEquals(435, m.getValue(2, 3));
+        assertEquals(435, m.getValue(2, 3), 0);
     }
 
     @Test(expected = IllegalArgumentException.class)
@@ -130,7 +130,7 @@ public class MatrixTest {
     public void testAdd() {
         final Matrix m = new Matrix(3, 2);
         final Matrix addend = new Matrix(3, 2);
-        final int[] values = new int[] { 1, 1 };
+        final double[] values = new double[] { 1, 1 };
         int r = 0;
         // populate two matrices with values[]
         for (; r < m.getRows(); r++) {
@@ -139,7 +139,7 @@ public class MatrixTest {
         }
         // create new matrix to represent expected matrix after add() is called
         final Matrix sum = new Matrix(3, 2);
-        final int[] summedValues = new int[] { 2, 2 };
+        final double[] summedValues = new double[] { 2, 2 };
         // populate summed matrix with expected summed values
         for (r = 0; r < sum.getRows(); r++)
             sum.setRow(r, summedValues);
@@ -150,14 +150,14 @@ public class MatrixTest {
     public void testAddInPlaceHappyPath() {
         final Matrix m = new Matrix(3, 2);
         final Matrix addend = new Matrix(3, 2);
-        final int[] values = new int[] { 1, 1 };
+        final double[] values = new double[] { 1, 1 };
         int r = 0;
         for (; r < m.getRows(); r++) {
             m.setRow(r, values);
             addend.setRow(r, values);
         }
         final Matrix sum = new Matrix(3, 2);
-        final int[] summedValues = new int[] { 2, 2 };
+        final double[] summedValues = new double[] { 2, 2 };
         for (r = 0; r < sum.getRows(); r++)
             sum.setRow(r, summedValues);
         m.addInPlace(addend);
@@ -177,15 +177,15 @@ public class MatrixTest {
     public void testSubtractThisMinusThat() {
         final Matrix m = new Matrix(3, 3);
         final Matrix subtrahend = new Matrix(3, 3);
-        final int[] mValues = new int[] { 48, 48, 48 };
-        final int[] subtrahendValues = new int[] { 10, 10, 10 };
+        final double[] mValues = new double[] { 48, 48, 48 };
+        final double[] subtrahendValues = new double[] { 10, 10, 10 };
         int r = 0;
         for (; r < m.getRows(); r++) {
             m.setRow(r, mValues);
             subtrahend.setRow(r, subtrahendValues);
         }
         final Matrix difference = new Matrix(3, 3);
-        final int[] differenceValues = new int[] { 38, 38, 38 };
+        final double[] differenceValues = new double[] { 38, 38, 38 };
         for (r = 0; r < difference.getRows(); r++)
             difference.setRow(r, differenceValues);
         assertEquals(difference, m.subtract(subtrahend));
@@ -195,15 +195,15 @@ public class MatrixTest {
     public void testSubtractThatMinusThis() {
         final Matrix m = new Matrix(3, 3);
         final Matrix subtrahend = new Matrix(3, 3);
-        final int[] mValues = new int[] { 44, 44, 44 };
-        final int[] subtrahendValues = new int[] { 18, 18, 18 };
+        final double[] mValues = new double[] { 44, 44, 44 };
+        final double[] subtrahendValues = new double[] { 18, 18, 18 };
         int r = 0;
         for (; r < m.getRows(); r++) {
             m.setRow(r, mValues);
             subtrahend.setRow(r, subtrahendValues);
         }
         final Matrix difference = new Matrix(3, 3);
-        final int[] differenceValues = new int[] { -26, -26, -26 };
+        final double[] differenceValues = new double[] { -26, -26, -26 };
         for (r = 0; r < difference.getRows(); r++)
             difference.setRow(r, differenceValues);
         assertEquals(difference, subtrahend.subtract(m));
@@ -213,15 +213,15 @@ public class MatrixTest {
     public void testSubtractInPlaceHappyPath() {
         final Matrix m = new Matrix(3, 3);
         final Matrix subtrahend = new Matrix(3, 3);
-        final int[] mValues = new int[] { 30, 30, 30 };
-        final int[] subtrahendValues = new int[] { 10, 10, 10 };
+        final double[] mValues = new double[] { 30, 30, 30 };
+        final double[] subtrahendValues = new double[] { 10, 10, 10 };
         int r = 0;
         for (; r < m.getRows(); r++) {
             m.setRow(r, mValues);
             subtrahend.setRow(r, subtrahendValues);
         }
         final Matrix difference = new Matrix(3, 3);
-        final int[] differenceValues = new int[] { 20, 20, 20 };
+        final double[] differenceValues = new double[] { 20, 20, 20 };
         for (r = 0; r < difference.getRows(); r++)
             difference.setRow(r, differenceValues);
         m.subtractInPlace(subtrahend);
@@ -241,15 +241,15 @@ public class MatrixTest {
     public void testMultiplyHappyPath() {
         final Matrix m = new Matrix(4, 3);
         final Matrix multiplicand = new Matrix(3, 2);
-        final int[] mValues = new int[] { 2, 2, 2 };
-        final int[] multiplicandValues = new int[] { 3, 3 };
+        final double[] mValues = new double[] { 2, 2, 2 };
+        final double[] multiplicandValues = new double[] { 3, 3 };
         int r = 0;
         for (; r < m.getRows(); r++)
             m.setRow(r, mValues);
         for (r = 0; r < multiplicand.getRows(); r++)
             multiplicand.setRow(r, multiplicandValues);
         final Matrix product = new Matrix(m.getRows(), multiplicand.getCols());
-        final int[] productValues = new int[] { 18, 18 };
+        final double[] productValues = new double[] { 18, 18 };
         for (r = 0; r < product.getRows(); r++)
             product.setRow(r, productValues);
         assertEquals(product, m.multiply(multiplicand));
@@ -275,7 +275,7 @@ public class MatrixTest {
     public void testEqualsSameMatrixValuesHappyPath() {
         final Matrix m = new Matrix(2, 3);
         final Matrix copy = new Matrix(2, 3);
-        final int[] values = new int[] { 2, 3, 4 };
+        final double[] values = new double[] { 2, 3, 4 };
         for (int r = 0; r < m.getRows(); r++) {
             m.setRow(r, values);
             copy.setRow(r, values);
@@ -294,7 +294,7 @@ public class MatrixTest {
     public void testEqualsUnequalMatrixValues() {
         final Matrix m = new Matrix(3, 2);
         final Matrix unequalValues = new Matrix(3, 2);
-        final int[] values = { 1, 1 };
+        final double[] values = { 1, 1 };
         for (int r = 0; r < m.getRows(); r++)
             m.setRow(r, values);
         assertFalse(m.equals(unequalValues));
@@ -324,17 +324,17 @@ public class MatrixTest {
     @Test
     public void testGetCol() {
         final Matrix m = new Matrix(5, 3);
-        final int[] values = new int[] { 1, 2, 3 };
+        final double[] values = new double[] { 1, 2, 3 };
         for (int r = 0; r < m.getRows(); r++)
             m.setRow(r, values);
-        final int[] expectedCol = new int[] { 2, 2, 2, 2, 2 };
-        assertArrayEquals(expectedCol, m.getCol(1));
+        final double[] expectedCol = new double[] { 2, 2, 2, 2, 2 };
+        assertArrayEquals(expectedCol, m.getCol(1), 0);
     }
 
     @Test
     public void testToString() {
         final Matrix identityMatrix = new Matrix(3, 3);
         identityMatrix.gLoadIdentity();
-        assertEquals("[1, 0, 0]\n[0, 1, 0]\n[0, 0, 1]\n", identityMatrix.toString());
+        assertEquals("[1.0, 0.0, 0.0]\n[0.0, 1.0, 0.0]\n[0.0, 0.0, 1.0]\n", identityMatrix.toString());
     }
 }
